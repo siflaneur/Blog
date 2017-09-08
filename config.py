@@ -4,7 +4,7 @@ import os
 
 class Configuration:
     DEBUG = True
-    current_path = os.path.abspath(os.path.dirname(__file__))
+    current_path = os.path.dirname(os.path.abspath(__file__))
 
     # flask_sqlalchemy config
     SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(os.path.join(current_path, 'data.sqlite'))

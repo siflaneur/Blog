@@ -1,7 +1,8 @@
 # coding=utf-8
-from app import app
+from app import manager, app, db
 import views
+import models
 
 
 if __name__ == '__main__':
-    app.run()
+    manager.run()
