@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} | Blog</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style type="text/css">
+        body {
+            margin: 0 10px 20px 10px;
+        {#            border: 3px solid red;#} padding-top: 100px;
+        }
+
+        .tttt {
+            float: left;
+        }
+
+        {% block extrastyle %}{% endblock %}
+    </style>
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span
+                    class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">{% block branding %}My Blog{% endblock %}</a>
+        </div>
+
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('homepage') }}">Home</a></li>
+                <li><a href="{{ url_for('entries.index') }}">Blog</a></li>
+                <li class="Other">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Other<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://twitter.com/flaneurse" target="_blank">Twitter</a></li>
+                        <li><a href="https://github.com/siflaneur" target="_blank">Github</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">RSS</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">About me</a></li>
+                    </ul>
+                </li>
+                {% block extra_nav %}{% endblock %}
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>{% block content_title %}{% endblock %}</h1> {% block content %} {% endblock %}
+        </div>
+
+        <div class="col-md-3"> {% block sidebar %}
+            <ul class="well nav nav-stacked">
+                <li><a href="#">Sidebar item</a></li>
+            </ul> {% endblock %}
+
+        </div>
+    </div>
+    <div class="row">
+        <hr/>
+        <footer>
+            <p>&copy; your name</p></footer>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

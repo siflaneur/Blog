@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Welcome to my blog
+{% endblock %}
+
+{% block content_title %}
+    <h2>Content</h2>
+{% endblock %}
+{% block content %}
+    {% if number %}
+        <p>Your number is {{ number|int }}</p>
+        <ul>
+            {% for i in range(number|int) %}
+                {% if i is even %}
+                    <li>{{ i }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No number is specified</p>
+    {% endif %}
+
+    <p>Your name is {{ name|default('<unknown>', True) }}</p>
+{% endblock %}
