@@ -3,11 +3,17 @@ from flask import Blueprint, render_template, request
 from helpers import g_object_list
 from models import Entry, Tag
 
-entries = Blueprint('entries', __name__, template_folder='templates')
+entries = Blueprint('entries', __name__, template_folder='./templates')
 
 
 def entry_list(template, query, **content):
+    """
+    Do the query and delegate the variable query to g_object_list().
+    if body or title contain the word you typed in query box or URI,
+    then you will see the result in the response page.
+    """
     search = request.args.get('q')
+    query = query.filter(Entry.status == 0)
     if search:
         query = query.filter((Entry.body.contains(search)) |
                              (Entry.title.contains(search)))
