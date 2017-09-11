@@ -1,0 +1,42 @@
+body {
+    margin: 0;
+    padding-top: 100px;
+}
+
+.fw {
+    width: 100%
+}
+
+.clf:after {
+    content: " ";
+    display: block;
+    font-size: 0;
+    line-height: 0;
+    clear: both
+}
+
+.wc {
+    width: 1000px
+}
+
+#bottom {
+    background: #f8f8f8
+}
+
+#foot {
+    border-top: 10px solid whitesmoke;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+#footer .info {
+    font-family: 'Alegreya', Georgia, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    color: #444;
+    padding: 21px 0 14px;
+    text-align: center;
+    font-size: 16px;
+}
