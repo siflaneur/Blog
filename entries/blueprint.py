@@ -1,5 +1,8 @@
 # coding=utf-8
-from flask import Blueprint, render_template, request
+from flask import Blueprint, redirect, render_template, request, url_for
+
+from app import db
+from entries.form import EntryForm
 from helpers import g_object_list
 from models import Entry, Tag
 
@@ -43,3 +46,16 @@ def tag_detail(slug):
 def detail(slug):
     entry = Entry.query.filter(Entry.slug == slug).first()
     return render_template('entries/detail.html', entry=entry)
+
+
+@entries.route('/create/', methods=['POST', 'GET'])
+def create():
+    # form = EntryForm()
+    form = EntryForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            entry = form.save_entry(Entry())
+            db.session.add(entry)
+            db.session.commit()
+            return redirect(url_for('entries.detail', slug=entry.slug))
+    return render_template('entries/create.html', form=form)

@@ -4,6 +4,7 @@ import os
 
 class Configuration:
     DEBUG = True
+    SECRET_KEY = 'XXXXXXXXX'
     current_path = os.path.dirname(os.path.abspath(__file__))
 
     # flask_sqlalchemy config
