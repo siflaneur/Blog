@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 
 from app import db
 from entries.form import EntryForm
@@ -56,6 +56,7 @@ def create():
         entry = form.save_entry(Entry())
         db.session.add(entry)
         db.session.commit()
+        flash('Enrty {} has been created successfully'.format(entry.title), 'success')
         return redirect(url_for('.detail', slug=entry.slug))
     return render_template('entries/create.html', form=form)
 
@@ -68,6 +69,7 @@ def edit(slug):
         entry = form.save_entry(entry)
         db.session.add(entry)
         db.session.commit()
+        flash('Enrty {} has been saved'.format(entry.title), 'success')
         return redirect(url_for('.detail', slug=entry.slug))
     return render_template('entries/edit.html', form=form, entry=entry)
 
@@ -79,5 +81,7 @@ def delete(slug):
         entry.status = Entry.STATUS_DELETED
         db.session.add(entry)
         db.session.commit()
+        flash('Enrty {} has been created deleted'.format(entry.title), 'success')
         return redirect(url_for('.index'))
     return render_template('entries/delete.html', entry=entry)
+
