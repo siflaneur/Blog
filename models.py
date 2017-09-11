@@ -19,6 +19,7 @@ class Entry(db.Model):
     __tablename__ = 'entries'
     STATUS_PUBLIC = 0
     STATUS_DRAFT = 1
+    STATUS_DELETED = 2
 
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

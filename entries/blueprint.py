@@ -52,10 +52,32 @@ def detail(slug):
 def create():
     # form = EntryForm()
     form = EntryForm()
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            entry = form.save_entry(Entry())
-            db.session.add(entry)
-            db.session.commit()
-            return redirect(url_for('entries.detail', slug=entry.slug))
+    if request.method == 'POST' and form.validate_on_submit():
+        entry = form.save_entry(Entry())
+        db.session.add(entry)
+        db.session.commit()
+        return redirect(url_for('.detail', slug=entry.slug))
     return render_template('entries/create.html', form=form)
+
+
+@entries.route('/<slug>/edit', methods=['GET', 'POST'])
+def edit(slug):
+    form = EntryForm()
+    entry = Entry.query.filter(Entry.slug == slug).first_or_404()
+    if request.method == 'POST' and form.validate_on_submit():
+        entry = form.save_entry(entry)
+        db.session.add(entry)
+        db.session.commit()
+        return redirect(url_for('.detail', slug=entry.slug))
+    return render_template('entries/edit.html', form=form, entry=entry)
+
+
+@entries.route('/<slug>/delete', methods=['GET', 'POST'])
+def delete(slug):
+    entry = Entry.query.filter(Entry.slug == slug).first_or_404()
+    if request.method == "POST":
+        entry.status = Entry.STATUS_DELETED
+        db.session.add(entry)
+        db.session.commit()
+        return redirect(url_for('.index'))
+    return render_template('entries/delete.html', entry=entry)
