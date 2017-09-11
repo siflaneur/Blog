@@ -1,7 +1,17 @@
-body {
-    margin: 0;
-    padding-top: 100px;
+html {
+    height: 100%;
 }
+
+body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+/*body {*/
+/*padding-top: 100px;*/
+/*}*/
 
 .fw {
     width: 100%
@@ -19,12 +29,46 @@ body {
     width: 1000px
 }
 
+.left {
+    float: left
+}
+
+.logo-container {
+    margin-right: 0;
+    float: none;
+    width: 100%;
+    text-align: center
+}
+
+.logo {
+    background: #367fa9;
+    border-top: 8px solid #266d96
+}
+
+.logo img {
+    width: auto
+}
+
+#top {
+    background: #3c8dbc;
+    border-top: 8px solid #367fa9
+}
+
+#header {
+    height: 77px;
+    position: relative
+}
+
 #bottom {
     background: #266d96
 }
 
 #foot {
     border-top: 10px solid #3c8dbc;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
 }
 
 .center {
