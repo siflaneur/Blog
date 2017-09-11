@@ -4,52 +4,7 @@
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %} | Blog</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <style type="text/css">
-        body {
-            margin: 0;
-            padding-top: 100px;
-        }
-
-        .fw {
-            width: 100%
-        }
-
-        .clf:after {
-            content: " ";
-            display: block;
-            font-size: 0;
-            line-height: 0;
-            clear: both
-        }
-
-        .wc {
-            width: 1000px
-        }
-
-        #bottom {
-            background: #266d96
-        }
-
-        #foot {
-            border-top: 10px solid #3c8dbc;
-        }
-
-        .center {
-            display: block;
-            margin-left: auto;
-            margin-right: auto
-        }
-
-        #footer .info {
-            font-family: 'Alegreya', Georgia, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            color: #eee;
-        {#            background-color: #367fa9;#} padding: 21px 0 14px;
-            text-align: center;
-            font-size: 16px;
-        }
-
-        {% block extrastyle %}{% endblock %}
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 </head>
 
 <body class="{% block body_class %}{% endblock %}">
@@ -101,15 +56,6 @@
         </div>
     </div>
 </div>
-{#<div class="row">#}
-{#    <hr/>#}
-{#    <div style="background-color: #4f726c; margin: 0">#}
-{#        <br>#}
-{#        <footer style="text-align: center">#}
-{#            <p>Copyleft 2017 flaneur. Made with ❤ by flaneur</p>#}
-{#        <br>#}
-{#    </div>#}
-{#</div>#}
 <br>
 <br>
 <div id="foot" class="fw">
