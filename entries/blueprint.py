@@ -1,8 +1,11 @@
 # coding=utf-8
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+import os
 
-from app import db
-from entries.form import EntryForm
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from werkzeug.utils import secure_filename
+
+from app import app, db
+from entries.form import EntryForm, ImageForm
 from helpers import g_object_list
 from models import Entry, Tag
 
@@ -85,3 +88,14 @@ def delete(slug):
         return redirect(url_for('.index'))
     return render_template('entries/delete.html', entry=entry)
 
+
+@entries.route('/image-upload/', methods=['GET', 'POST'])
+def upload():
+    form = ImageForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        image_file = request.files['file']
+        filename = os.path.join(app.config['IMAGES_DIR'], secure_filename(image_file.filename))
+        image_file.save(filename)
+        flash('Saved {}'.format(os.path.basename(filename), 'success'))
+        return redirect(url_for('entries.index'))
+    return render_template('entries/image_upload.html', form=form)

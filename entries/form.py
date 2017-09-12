@@ -1,6 +1,6 @@
 # coding=utf-8
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SelectField, SubmitField
+from wtforms import FileField, StringField, SelectField, SubmitField, TextAreaField
 from wtforms.validators import Length, Email, DataRequired
 
 from models import Entry, Tag
@@ -40,3 +40,9 @@ class EntryForm(FlaskForm):
         self.populate_obj(entry)
         entry.generate_slug()
         return entry
+
+
+class ImageForm(FlaskForm):
+    file = FileField('Image field')
+    Upload = SubmitField('Upload')
+
