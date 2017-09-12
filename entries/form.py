@@ -1,7 +1,8 @@
 # coding=utf-8
+from flask import request
 from flask_wtf import FlaskForm
 from wtforms import FileField, StringField, SelectField, SubmitField, TextAreaField
-from wtforms.validators import Length, Email, DataRequired
+from wtforms.validators import Length, Email, DataRequired, ValidationError
 
 from models import Entry, Tag
 
@@ -42,7 +43,13 @@ class EntryForm(FlaskForm):
         return entry
 
 
-class ImageForm(FlaskForm):
-    file = FileField('Image field')
-    Upload = SubmitField('Upload')
+def check_image(form, field):
+    file = request.files['file']
+    filename = file.filename
+    if not filename.endswith('.jpg'):
+        raise ValidationError('Must be an image')
 
+
+class ImageForm(FlaskForm):
+    file = FileField('Image field', validators=[check_image])
+    Upload = SubmitField('Upload')
