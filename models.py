@@ -21,7 +21,6 @@ class Entry(db.Model):
     STATUS_DRAFT = 1
     STATUS_DELETED = 2
 
-
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(100))
     slug = db.Column(db.String(100), unique=True)
@@ -59,3 +58,22 @@ class Tag(db.Model):
 
     def __repr__(self):
         return '<Tag: {}>'.format(self.name)
+
+
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(64))
+    email = db.Column(db.String(64), unique=True)
+    password_hash = db.Column(db.String(255))
+    slug = db.Column(db.String(64), unique=True)
+    active = db.Column(db.Boolean, default=True)
+    created_timestamp = db.Column(db.DateTime, default=datetime.now())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_slug()
+
+    def generate_slug(self):
+        if self.name:
+            self.slug = slugify(self.title)
