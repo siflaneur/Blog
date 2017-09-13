@@ -1,6 +1,6 @@
 # coding=utf-8
 from flask import flash, render_template, request, redirect, url_for
-from flask_login import login_user
+from flask_login import login_user, logout_user
 
 from app import app, login_manager
 from form import LoginForm
@@ -21,3 +21,10 @@ def login():
         flash('Successfully login in as {}'.format(form.email.data), 'success')
         return redirect(request.args.get('next') or url_for('homepage'))
     return render_template('login.html', form=form)
+
+
+@app.route('/logout/', methods=['GET', 'POST'])
+def logout():
+    logout_user()
+    flash('You have been logged out.', 'success')
+    return redirect(request.args.get('next') or url_for('homepage'))

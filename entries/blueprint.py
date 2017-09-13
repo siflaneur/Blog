@@ -53,6 +53,7 @@ def detail(slug):
 
 
 @entries.route('/create/', methods=['POST', 'GET'])
+@login_required
 def create():
     # form = EntryForm()
     form = EntryForm()
@@ -66,6 +67,7 @@ def create():
 
 
 @entries.route('/<slug>/edit', methods=['GET', 'POST'])
+@login_required
 def edit(slug):
     form = EntryForm()
     entry = Entry.query.filter(Entry.slug == slug).first_or_404()
@@ -79,6 +81,7 @@ def edit(slug):
 
 
 @entries.route('/<slug>/delete', methods=['GET', 'POST'])
+@login_required
 def delete(slug):
     entry = Entry.query.filter(Entry.slug == slug).first_or_404()
     if request.method == "POST":
@@ -91,6 +94,7 @@ def delete(slug):
 
 
 @entries.route('/image-upload/', methods=['GET', 'POST'])
+@login_required
 def upload():
     form = ImageForm()
     if request.method == 'POST' and form.validate_on_submit():
