@@ -7,7 +7,7 @@ __pycache__/
 .idea/
 
 # static/images
-.static/images/
+static/images/
 
 # Database
 data.sqlite
@@ -108,3 +108,4 @@ ENV/
 # mypy
 .mypy_cache/
 
+static/images/
