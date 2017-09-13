@@ -2,7 +2,9 @@
 import re
 from datetime import datetime
 
-from app import db
+from flask_login import UserMixin
+
+from app import db, login_manager, bcrypt
 
 
 def slugify(s):
@@ -60,7 +62,12 @@ class Tag(db.Model):
         return '<Tag: {}>'.format(self.name)
 
 
-class User(db.Model):
+@login_manager.user_loader
+def _user_loader(user_id):
+    return User.query.get(int(user_id))
+
+
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(64))
@@ -70,6 +77,24 @@ class User(db.Model):
     active = db.Column(db.Boolean, default=True)
     created_timestamp = db.Column(db.DateTime, default=datetime.now())
 
+    @staticmethod
+    def make_password(plaintext):
+        return bcrypt.generate_password_hash(plaintext)
+
+    def check_password(self, raw_password):
+        return bcrypt.check_password_hash(self.password_hash, raw_password)
+
+    @classmethod
+    def create(cls, email, password, **kwargs):
+        return User(email=email, password_hash=User.make_password(password), **kwargs)
+
+    @staticmethod
+    def authenticate(email, password):
+        user = User.query.filter(User.email == email).first()
+        if user and user.check_password(raw_password=password):
+            return user
+        return False
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.generate_slug()
@@ -77,3 +102,15 @@ class User(db.Model):
     def generate_slug(self):
         if self.name:
             self.slug = slugify(self.title)
+
+    def is_active(self):
+        return self.active
+
+    def get_id(self):
+        return self.id
+
+    def is_authenticated(self):
+        return True
+
+    def is_anonymous(self):
+        return False

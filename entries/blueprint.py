@@ -2,6 +2,7 @@
 import os
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import LoginManager, login_required
 from werkzeug.utils import secure_filename
 
 from app import app, db
