@@ -1,5 +1,6 @@
 # coding=utf-8
 from app import manager, app, db
+import admin
 import views
 import models
 

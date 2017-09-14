@@ -48,6 +48,14 @@ class Entry(db.Model):
     def __repr__(self):
         return '<Entry: {}>'.format(self.title)
 
+    @property
+    def tag_list(self):
+        return ', '.join(tag.name for tag in self.tags)
+
+    @property
+    def tease(self):
+        return self.body[:30]
+
 
 class Tag(db.Model):
     __tablename__ = 'tags'
@@ -76,6 +84,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(255))
     slug = db.Column(db.String(64), unique=True)
     active = db.Column(db.Boolean, default=True)
+    admin = db.Column(db.Boolean, default=False)
     created_timestamp = db.Column(db.DateTime, default=datetime.now())
     entries = db.relationship('Entry', backref='author', lazy='dynamic')
 
@@ -119,3 +128,6 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return "<User: {}>".format(self.email)
+
+    def is_admin(self):
+        return self.admin
