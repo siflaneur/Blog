@@ -24,7 +24,7 @@ class Entry(db.Model):
     STATUS_DELETED = 2
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    title = db.Column(db.String(100))
+    title = db.Column(db.String(80))
     slug = db.Column(db.String(100), unique=True)
     body = db.Column(db.Text)
     created_timestamp = db.Column(db.DateTime, default=datetime.now)
@@ -32,6 +32,7 @@ class Entry(db.Model):
     modified_timestamp = db.Column(db.DateTime,
                                    default=datetime.now,
                                    onupdate=datetime.now)
+    author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     tags = db.relationship('Tag', secondary=entry_tags,
                            backref=db.backref('entries', lazy='dynamic'))
 
@@ -76,6 +77,7 @@ class User(db.Model, UserMixin):
     slug = db.Column(db.String(64), unique=True)
     active = db.Column(db.Boolean, default=True)
     created_timestamp = db.Column(db.DateTime, default=datetime.now())
+    entries = db.relationship('Entry', backref='author', lazy='dynamic')
 
     @staticmethod
     def make_password(plaintext):
@@ -101,7 +103,7 @@ class User(db.Model, UserMixin):
 
     def generate_slug(self):
         if self.name:
-            self.slug = slugify(self.title)
+            self.slug = slugify(self.name)
 
     def is_active(self):
         return self.active
@@ -114,3 +116,6 @@ class User(db.Model, UserMixin):
 
     def is_anonymous(self):
         return False
+
+    def __repr__(self):
+        return "<User: {}>".format(self.email)

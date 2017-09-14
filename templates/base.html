@@ -36,17 +36,17 @@
                         <li><a href="#">About me</a></li>
                     </ul>
                 </li>
-                {% if g.user.is_authenticated %}
-                    <li>
-                        <a href="{{ url_for('logout', next=request.path) }}">Logout</a>
-                    </li>
-                {% else %}
-                    <li>
-                        <a href="{{ url_for('login', next=request.path) }}">Login</a>
-                    </li>
-                {% endif %}
-                {% block extra_nav %}{% endblock %}
-            </ul>
+                    {% if g.user.is_authenticated %}
+                        <li>
+                            <a href="{{ url_for('logout', next=request.path) }}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ url_for('login', next=request.path) }}">Login</a>
+                        </li>
+                    {% endif %}
+                    {% block extra_nav %}{% endblock %}
+                </ul>
         </div>
     </div>
 </div>

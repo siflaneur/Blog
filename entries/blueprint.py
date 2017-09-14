@@ -1,7 +1,7 @@
 # coding=utf-8
 import os
 
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, flash, g, redirect, render_template, request, url_for
 from flask_login import LoginManager, login_required
 from werkzeug.utils import secure_filename
 
@@ -19,12 +19,37 @@ def entry_list(template, query, **content):
     if body or title contain the word you typed in query box or URI,
     then you will see the result in the response page.
     """
-    search = request.args.get('q')
-    query = query.filter(Entry.status == 0)
-    if search:
-        query = query.filter((Entry.body.contains(search)) |
-                             (Entry.title.contains(search)))
+    query = filter_status_by_user(query)
+
+    valid_status = [Entry.STATUS_PUBLIC, Entry.STATUS_DRAFT]
+    query = query.filter(Entry.status.in_(valid_status))
+    if request.args.get('q'):
+        search = request.args.get('q')
+        query = query.filter(
+            (Entry.body.contains(search)) |
+            (Entry.title.contains(search))
+        )
     return g_object_list(template, query, **content)
+
+
+def filter_status_by_user(query):
+    if not g.user.is_authenticated:
+        return query.filter(Entry.status == Entry.STATUS_PUBLIC)
+    else:
+        query = query.filter(
+            (Entry.status == Entry.STATUS_PUBLIC) |
+            ((Entry.author == g.user) &
+             (Entry.status != Entry.STATUS_DELETED)))
+    return query
+
+
+def get_entry_or_404(slug, author=None):
+    query = Entry.query.filter(Entry.slug == slug)
+    if author:
+        query = query.filter(Entry.author == author)
+    else:
+        query = filter_status_by_user(query)
+    return query.first_or_404()
 
 
 @entries.route('/')
@@ -55,10 +80,9 @@ def detail(slug):
 @entries.route('/create/', methods=['POST', 'GET'])
 @login_required
 def create():
-    # form = EntryForm()
     form = EntryForm()
     if request.method == 'POST' and form.validate_on_submit():
-        entry = form.save_entry(Entry())
+        entry = form.save_entry(Entry(author=g.user))
         db.session.add(entry)
         db.session.commit()
         flash('Enrty {} has been created successfully'.format(entry.title), 'success')
@@ -70,7 +94,7 @@ def create():
 @login_required
 def edit(slug):
     form = EntryForm()
-    entry = Entry.query.filter(Entry.slug == slug).first_or_404()
+    entry = get_entry_or_404(slug, author=None)
     if request.method == 'POST' and form.validate_on_submit():
         entry = form.save_entry(entry)
         db.session.add(entry)
@@ -83,7 +107,7 @@ def edit(slug):
 @entries.route('/<slug>/delete', methods=['GET', 'POST'])
 @login_required
 def delete(slug):
-    entry = Entry.query.filter(Entry.slug == slug).first_or_404()
+    entry = get_entry_or_404(slug, author=None)
     if request.method == "POST":
         entry.status = Entry.STATUS_DELETED
         db.session.add(entry)
