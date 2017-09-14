@@ -1,5 +1,6 @@
 # coding=utf-8
-from flask_admin import Admin
+from flask import g, request, redirect, url_for
+from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib.fileadmin import FileAdmin
 from wtforms import SelectField, PasswordField
@@ -8,12 +9,25 @@ from app import app, db
 from models import Entry, Tag, User
 
 
-class BlogFileAdmin(FileAdmin):
+class AdminAuthentication:
+    def is_accessible(self):
+        return g.user.is_authenticated() and g.user.is_admin()
+
+
+class BlogFileAdmin(AdminAuthentication, FileAdmin):
     pass
 
 
-class BaseModelView(ModelView):
+class BaseModelView(AdminAuthentication, ModelView):
     pass
+
+
+class IndexView(AdminIndexView):
+    @expose('/')
+    def index(self):
+        if not (g.user.is_authenticated and g.user.is_admin()):
+            return redirect(url_for('login', next=request.path))
+        return self.render('admin/index.html')
 
 
 class SlugModelView(BaseModelView):
@@ -69,7 +83,7 @@ class UserModelView(SlugModelView):
             return super(UserModelView, self).on_model_change(form, model, is_created)
 
 
-admin = Admin(app, 'Blog Admin')
+admin = Admin(app, 'Blog Admin', index_view=IndexView())
 admin.add_view(EntryModelView(Entry, db.session))
 admin.add_view(ModelView(Tag, db.session))
 admin.add_view(UserModelView(User, db.session))
