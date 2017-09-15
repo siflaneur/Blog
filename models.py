@@ -35,6 +35,7 @@ class Entry(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     tags = db.relationship('Tag', secondary=entry_tags,
                            backref=db.backref('entries', lazy='dynamic'))
+    comments = db.relationship('Comment', backref='entry', lazy='dynamic')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -131,3 +132,24 @@ class User(db.Model, UserMixin):
 
     def is_admin(self):
         return self.admin
+
+
+class Comment(db.Model):
+    __tablename__ = 'comments'
+    STATUS_PEDNING_MODERATION = 0
+    STATUS_PUBLIC = 1
+    STATUS_SPAM = 8
+    STATUS_DELETED = 9
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    email = db.Column(db.String(64))
+    ip_address = db.Column(db.String(64))
+    url = db.Column(db.String(200))
+    body = db.Column(db.Text)
+    status = db.Column(db.SmallInteger)
+    created_timestamp = db.Column(db.DateTime, default=datetime.now())
+    entry_id = db.Column(db.Integer, db.ForeignKey('entries.id'))
+
+    def __repr__(self):
+        return '<Comment: {}>'.format(self.name)
