@@ -5,8 +5,10 @@ import blog.views
 import blog.models
 
 from blog.entries.blueprint import entries
-app.register_blueprint(entries, url_prefix='/entries')
+from blog.api import api
 
+app.register_blueprint(entries, url_prefix='/entries')
+app.register_blueprint(api, url_prefix='/api')
 
 if __name__ == '__main__':
     manager.run()

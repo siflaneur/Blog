@@ -1,7 +1,7 @@
 # coding=utf-8
 import os
 
-from flask import Blueprint, flash, g, redirect, render_template, request, url_for
+from flask import abort, Blueprint, flash, g, redirect, render_template, request, url_for
 from flask_login import LoginManager, login_required
 from werkzeug.utils import secure_filename
 
@@ -61,20 +61,26 @@ def index():
 @entries.route('/tags/')
 def tag_index():
     tags = Tag.query.order_by(Tag.name)
-    return g_object_list('entries/tag_index.html', tags)
+    if tags:
+        return g_object_list('entries/tag_index.html', tags)
+    abort(404)
 
 
 @entries.route('/tags/<slug>')
 def tag_detail(slug):
     tag = Tag.query.filter(Tag.slug == slug).first_or_404()
-    entries = tag.entries.order_by(Entry.created_timestamp.desc())
-    return entry_list('entries/tag_detail.html', entries, tag=tag)
+    if tag:
+        entries = tag.entries.order_by(Entry.created_timestamp.desc())
+        return entry_list('entries/tag_detail.html', entries, tag=tag)
+    abort(404)
 
 
 @entries.route('/<slug>')
 def detail(slug):
     entry = Entry.query.filter(Entry.slug == slug).first()
-    return render_template('entries/detail.html', entry=entry)
+    if entry:
+        return render_template('entries/detail.html', entry=entry)
+    abort(404)
 
 
 @entries.route('/create/', methods=['POST', 'GET'])

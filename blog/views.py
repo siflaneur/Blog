@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import flash, render_template, request, redirect, url_for
+from flask import flash, make_response, render_template, request, redirect, url_for
 from flask_login import login_user, logout_user
 
 from blog.app import app, login_manager
@@ -28,3 +28,13 @@ def logout():
     logout_user()
     flash('You have been logged out.', 'success')
     return redirect(request.args.get('next') or url_for('homepage'))
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
