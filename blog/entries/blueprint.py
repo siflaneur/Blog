@@ -5,10 +5,10 @@ from flask import Blueprint, flash, g, redirect, render_template, request, url_f
 from flask_login import LoginManager, login_required
 from werkzeug.utils import secure_filename
 
-from app import app, db
-from entries.form import EntryForm, ImageForm
-from helpers import g_object_list
-from models import Entry, Tag
+from blog.app import app, db
+from blog.entries.form import EntryForm, ImageForm
+from blog.helpers import g_object_list
+from blog.models import Entry, Tag
 
 entries = Blueprint('entries', __name__, template_folder='./templates')
 

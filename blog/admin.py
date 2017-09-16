@@ -5,8 +5,8 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib.fileadmin import FileAdmin
 from wtforms import SelectField, PasswordField
 
-from app import app, db
-from models import Entry, Tag, User
+from blog.app import app, db
+from blog.models import Entry, Tag, User
 
 
 class AdminAuthentication:

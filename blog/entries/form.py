@@ -4,7 +4,7 @@ from flask_wtf import FlaskForm
 from wtforms import FileField, StringField, SelectField, SubmitField, TextAreaField
 from wtforms.validators import Length, Email, DataRequired, ValidationError
 
-from models import Entry, Tag
+from blog.models import Entry, Tag
 
 
 class TagField(StringField):

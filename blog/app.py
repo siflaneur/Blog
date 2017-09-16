@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_script import Manager
 from flask_bootstrap import Bootstrap
 
-from config import Configuration
+from blog.config import Configuration
 
 app = Flask(__name__)
 app.config.from_object(Configuration)
@@ -28,6 +28,7 @@ login_manager.login_view = "login"
 @app.before_request
 def _before_request():
     g.user = current_user
+
 
 @app.before_request
 def _last_page_visted():

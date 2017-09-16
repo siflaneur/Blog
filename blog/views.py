@@ -2,8 +2,8 @@
 from flask import flash, render_template, request, redirect, url_for
 from flask_login import login_user, logout_user
 
-from app import app, login_manager
-from form import LoginForm
+from blog.app import app, login_manager
+from blog.form import LoginForm
 
 
 @app.route('/')

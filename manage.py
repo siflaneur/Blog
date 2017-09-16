@@ -1,10 +1,10 @@
 # coding=utf-8
-from app import manager, app, db
-import admin
-import views
-import models
+from blog.app import manager, app, db
+import blog.admin
+import blog.views
+import blog.models
 
-from entries.blueprint import entries
+from blog.entries.blueprint import entries
 app.register_blueprint(entries, url_prefix='/entries')
 
 
